@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alvi</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      background: url("https://i.postimg.cc/prk6zCr8/download-1.gif") no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 0;
+    }
+
+    .menu {
+      position: absolute;
+      left: 250px;
+      top: 35%;
+      transform: translateY(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .animate-in {
+      animation: fadeSlideIn 0.8s ease forwards;
+    }
+
+    @keyframes fadeSlideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .menu button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      text-align: left;
+      cursor: pointer;
+      font-weight: normal;
+      padding: 15px 30px;
+      letter-spacing: 20px;
+      transition: font-weight 0.2s ease, text-shadow 0.2s ease;
+    }
+
+    .menu button:hover,
+    .menu button.active {
+      font-weight: bold;
+      position: relative;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+
+    .menu button.active::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 2px;
+      background: white;
+    }
+  </style>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const fromAbout = sessionStorage.getItem('fromAbout');
+      if (fromAbout) {
+        sessionStorage.removeItem('fromAbout');
+        const menu = document.querySelector('.menu');
+        if (menu) {
+          menu.style.opacity = 0;
+          menu.style.transform = 'translateY(50px) scale(0.95)';
+          menu.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          requestAnimationFrame(() => {
+            menu.style.opacity = 1;
+            menu.style.transform = 'translateY(0) scale(1)';
+          });
+        }
+      }
+    });
+  </script>
+  
+</head>
+<body>
+  <div class="overlay"></div>
+
+  <div class="menu" id="menu">
+    <button class="active">Home</button>
+    <button onclick="window.location.href='about.html'">About</button>
+    <button>My Work</button>
+    <button>Contacts</button>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('menu').classList.add('animate-in');
+    });
+  </script>
+</body>
+</html>
