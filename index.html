@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alvi</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: url("https://i.postimg.cc/prk6zCr8/download-1.gif") no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      overflow: hidden;
+    }
+
+    .overlay,
+    .blur-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .blur-bg {
+      backdrop-filter: blur(5px);
+      background: rgba(0, 0, 0, 0.4);
+      display: none;
+    }
+
+    /* Menu styles */
+    .menu {
+      position: absolute;
+      left: 250px;
+      top: 35%;
+      transform: translateY(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .menu.animate-in {
+      animation: fadeSlideIn 0.8s ease forwards;
+    }
+
+    @keyframes fadeSlideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .menu button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      text-align: left;
+      cursor: pointer;
+      font-weight: normal;
+      padding: 15px 30px;
+      letter-spacing: 20px;
+      transition: font-weight 0.2s ease, text-shadow 0.2s ease;
+    }
+
+    .menu button:hover,
+    .menu button.active {
+      font-weight: bold;
+      position: relative;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+
+    .menu button.active::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 2px;
+      background: white;
+    }
+
+    /* About Page styles */
+    @keyframes slideFadeIn {
+      0% { opacity: 0; transform: translateY(50px) scale(0.95); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes slideFadeOut {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(50px) scale(0.95); }
+    }
+
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 500;
+      z-index: 3;
+      transition: background 0.3s, transform 0.2s;
+      display: none;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      padding: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: none;
+      animation: slideFadeIn 0.8s ease;
+      color: black;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .info-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .gif-container img {
+      max-width: 320px;
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .text-container {
+      max-width: 600px;
+    }
+
+    .text-container p {
+      font-size: 20px;
+      line-height: 1.6;
+    }
+
+    .info-list {
+      flex: 1;
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      min-width: 280px;
+    }
+
+    .info-list h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 32px;
+    }
+
+    .info-list ul {
+      list-style: none;
+      padding: 0;
+      font-size: 18px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .info-list ul li {
+      margin: 10px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .basic-info {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      row-gap: 12px;
+      column-gap: 15px;
+    }
+
+    .basic-info li {
+      display: contents;
+    }
+
+    .basic-info span {
+      font-weight: 500;
+      opacity: 0.9;
+      white-space: nowrap;
+    }
+
+    .basic-info strong {
+      font-weight: 600;
+      white-space: normal;
+    }
+
+    .bottom-info-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      margin-top: 60px;
+    }
+
+    @media (max-width: 768px) {
+      .menu {
+        left: 50%;
+        transform: translate(-50%, -50%);
+        align-items: center;
+      }
+
+      .info-section {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .bottom-info-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .basic-info {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .basic-info span,
+      .basic-info strong {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="blur-bg" id="blurBg"></div>
+
+  <a href="#" class="back-button" id="backBtn">⟵ Back</a>
+
+  <!-- Menu -->
+  <div class="menu animate-in" id="menu">
+    <button class="active">Home</button>
+    <button id="aboutBtn">About</button>
+    <button>My Work</button>
+    <button>Contacts</button>
+  </div>
+
+  <!-- About Section -->
+  <div class="content" id="aboutContent">
+    <div class="info-section">
+      <div class="gif-container">
+        <img src="https://i.postimg.cc/5NN56bV6/cat-cat-meme.gif" alt="GIF">
+      </div>
+      <div class="text-container">
+        <h1>Hello! I'm Alvi.</h1>
+        <p>
+          I love creating fun and engaging projects, especially ones that involve games, design, or interactivity. This site is a place where I share my work and ideas.
+        </p>
+        <p>
+          Whether you're here to explore or collaborate, feel free to look around and connect. Let's build something cool together!
+        </p>
+      </div>
+    </div>
+
+    <div class="bottom-info-container">
+      <div class="info-list">
+        <h2>More About Me</h2>
+        <ul>
+          <li>💻 Passionate about web and game development</li>
+          <li>🎮 Enjoys Minecraft and creating mods</li>
+          <li>🖌️ Loves designing clean and creative interfaces</li>
+          <li>📚 Always learning new coding skills</li>
+          <li>📷 Into photo editing and animation projects</li>
+          <li>🤝 Open for collaborations and ideas</li>
+        </ul>
+      </div>
+
+      <div class="info-list">
+        <h2>Basic Info</h2>
+        <ul class="basic-info">
+          <li><span>👤 Name</span><strong>: Alvi</strong></li>
+          <li><span>🎂 Age</span><strong>: 17</strong></li>
+          <li><span>🌍 Nationality</span><strong>: Bangladeshi</strong></li>
+          <li><span>🕌 Religion</span><strong>: Islam</strong></li>
+          <li><span>📍 Location</span><strong>: Dhaka, Bangladesh</strong></li>
+          <li><span>✨ Hobbies</span><strong>: Gaming, UI Designing, Coding, Anime, Photo Editing</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const menu = document.getElementById('menu');
+    const aboutBtn = document.getElementById('aboutBtn');
+    const aboutContent = document.getElementById('aboutContent');
+    const backBtn = document.getElementById('backBtn');
+    const blurBg = document.getElementById('blurBg');
+
+    aboutBtn.addEventListener('click', () => {
+      menu.style.display = 'none';
+      blurBg.style.display = 'block';
+      backBtn.style.display = 'block';
+      aboutContent.style.display = 'block';
+      aboutContent.style.animation = 'slideFadeIn 0.8s ease';
+    });
+
+    backBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      aboutContent.style.animation = 'slideFadeOut 0.5s ease forwards';
+      aboutContent.addEventListener('animationend', () => {
+        aboutContent.style.display = 'none';
+        backBtn.style.display = 'none';
+        blurBg.style.display = 'none';
+        menu.style.display = 'flex';
+        menu.classList.add('animate-in');
+      }, { once: true });
+    });
+  </script>
+</body>
+</html>
+
